@@ -17,8 +17,8 @@ export class ProductController {
   }
 
   @Get(':key')
-  async getProductByKey(@Param() { key }) {
-    console.log(key);
-    return await this.productService.findByKey(key);
+  async getProductByKey(@Param() { prefix }) {
+    console.log(prefix);
+    return await this.productService.findByPrefix(prefix);
   }
 }

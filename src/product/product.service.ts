@@ -12,15 +12,18 @@ export class ProductService {
     await new this.productModel(productDto).save();
     return { success: 'ok' };
   }
-
   async findByKey(key: string) {
     return await this.productModel.find({ key });
   }
   async findByPrefix(prefix: string) {
     return await this.productModel.find({ prefix });
   }
-
   async findById(_id: number) {
-    return await this.productModel.findById({ _id });
+    const result = await this.productModel.find({ _id }).exec();
+    console.log(result);
+    return result
+  }
+  async deleteById(_id:number) {
+    return await this.productModel.deleteOne({_id});
   }
 }
