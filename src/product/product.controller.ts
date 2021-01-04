@@ -11,14 +11,15 @@ export class ProductController {
     return await this.productService.create(product);
   }
 
-  @Get(':key/:id')
-  async getProduct(@Param() { id }) {
-    return await this.productService.findById(id);
+  @Get(':prefix/:id')
+  async getProduct(@Param() { prefix, id }) {
+    console.log(id, 'id');
+    return await this.productService.findById(id, prefix);
   }
 
-  @Get(':key')
+  @Get(':prefix')
   async getProductByKey(@Param() { prefix }) {
-    console.log(prefix);
+    console.log(prefix, 'prefix');
     return await this.productService.findByPrefix(prefix);
   }
 }

@@ -5,4 +5,5 @@ export interface Product extends Document {
   key: string;
   image: string;
   name: string;
+  prefix: string;
 }
