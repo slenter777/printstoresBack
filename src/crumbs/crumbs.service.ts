@@ -27,7 +27,7 @@ export class CrumbsService {
     try {
       const { name, key } = await this.productModel.findOne({ prefix });
       const prevCrumbs = await this.createCategoryCrumbs(key);
-      return [...prevCrumbs, { path: `/product/${key}`, title: name }];
+      return [...prevCrumbs, { path: `/product/${prefix}`, title: name }];
     } catch {
       return [...defaultCrumbs];
     }
