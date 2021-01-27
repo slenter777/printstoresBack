@@ -22,12 +22,8 @@ export class CategoryService {
     return await new this.categoryModel(category).save();
   }
   async getAllCategory() {
-    const itemsList = await this.categoryModel.find();
-    const crumbs = await this.crumbsService.createCatalogCrumbs();
-    return {
-      crumbs,
-      itemsList,
-    };
+    const category = await this.categoryModel.find();
+    return { category };
   }
 
   async deleteCategory(data: CategoryDeleteDto[]) {
@@ -36,17 +32,13 @@ export class CategoryService {
       await this.categoryModel.deleteOne({ key });
       quantity++;
     }
-    const itemsList = await this.categoryModel.find();
-    return { itemsList, quantity };
+    const category = await this.categoryModel.find();
+    return { category, quantity };
   }
 
   async findByKey(key: string) {
-    const itemsList = await this.productModel.find({ key });
-    const crumbs = await this.crumbsService.createCategoryCrumbs(key);
-    return {
-      crumbs,
-      itemsList,
-    };
+    const category = await this.productModel.find({ key });
+    return { category };
   }
 
   async getCategoryByKey(key: string) {
@@ -54,6 +46,7 @@ export class CategoryService {
   }
 
   async getCategoryById(id: number) {
-    return await this.categoryModel.findById(id);
+    const category = await this.categoryModel.findById(id);
+    return { category };
   }
 }

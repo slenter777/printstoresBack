@@ -20,23 +20,32 @@ export class ProductService {
   }
 
   async findByPrefix(prefix: string) {
-    const itemsList = await this.productModel.find({ prefix });
-    const crumbs = await this.crumbsService.createProductCrumbsByPrefix(prefix);
-    return {
-      crumbs,
-      itemsList,
-    };
+    const products = await this.productModel.find({ prefix });
+    return products;
   }
   async findById(_id: number, key: string) {
-    console.log(key, 'key');
-    const itemsList = await this.productModel.find({ _id }).exec();
-    const crumbs = await this.crumbsService.createProductCrumbsById(key, _id);
+    const products = await this.productModel.find({ _id }).exec();
     return {
-      crumbs,
-      itemsList,
+      products,
     };
   }
   async deleteById(_id: number) {
-    return await this.productModel.deleteOne({ _id });
+    const products = await this.productModel.deleteOne({ _id });
+    return {
+      products,
+    };
+  }
+  async allProducts() {
+    const products = await this.productModel.find();
+    return products;
+  }
+
+  async filterProducts(currentPage: number, pageSize: number) {
+    const products = await this.productModel
+      .find()
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+    const total = await this.productModel.find();
+    return { products, total: total.length };
   }
 }

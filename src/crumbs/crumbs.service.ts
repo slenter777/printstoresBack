@@ -12,30 +12,33 @@ export class CrumbsService {
     @InjectModel('Category') private readonly categoryModel: Model<Category>,
   ) {}
 
-  async createCatalogCrumbs() {
-    return [...defaultCrumbs];
-  }
-  async createCategoryCrumbs(key: string) {
+  async createCrumbsByKey(key: string) {
     const { name } = await this.categoryModel.findOne({ key });
     return [
       ...defaultCrumbs,
       { path: `/catalog/category/${key}`, title: name },
     ];
   }
-  async createProductCrumbsByPrefix(prefix) {
-    console.log(prefix);
+  async createCrumbsByPrefix(prefix) {
     try {
       const { name, key } = await this.productModel.findOne({ prefix });
-      const prevCrumbs = await this.createCategoryCrumbs(key);
+      const prevCrumbs = await this.createCrumbsByKey(key);
       return [...prevCrumbs, { path: `/product/${prefix}`, title: name }];
     } catch {
       return [...defaultCrumbs];
     }
   }
 
-  async createProductCrumbsById(prefix: string, _id: number) {
+  async createCrumbsByPrefixAndId(prefix: string, _id: number) {
     const { name } = await this.productModel.findById({ _id });
-    const prevCrumbs = await this.createProductCrumbsByPrefix(prefix);
+    const prevCrumbs = await this.createCrumbsByPrefix(prefix);
     return [...prevCrumbs, { path: `product/${prefix}/${_id}`, title: name }];
+  }
+
+  async getCrumbs(key: string, prefix: string, _id: number) {
+    if (prefix && _id) return this.createCrumbsByPrefixAndId(prefix, _id);
+    if (key) return this.createCrumbsByKey(key);
+    if (prefix) return this.createCrumbsByPrefix(prefix);
+    return [...defaultCrumbs];
   }
 }

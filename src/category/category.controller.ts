@@ -22,7 +22,6 @@ export class CategoryController {
 
   @Post('/create')
   async createCategory(@Body() data: CategoryDto) {
-    console.log(data);
     return await this.categoryService.create(data);
   }
 }
