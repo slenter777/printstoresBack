@@ -2,15 +2,17 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CrumbsService } from '../crumbs/crumbs.service';
+import { ModelsService } from '../models/models.service';
 import { Product } from '../product/interfaces/product.inteface';
 import CategoryDto, { CategoryDeleteDto } from './dto/category.dto';
 import { Category } from './interfaces/Category.interfaces';
 
 @Injectable()
 export class CategoryService {
+  categoryModel = this.modelsService.getCategoryModel();
+  productModel = this.modelsService.getProductModel();
   constructor(
-    @InjectModel('Category') private readonly categoryModel: Model<Category>,
-    @InjectModel('Product') private productModel: Model<Product>,
+    private modelsService: ModelsService,
     private crumbsService: CrumbsService,
   ) {}
 

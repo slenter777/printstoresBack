@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CategorySchema } from './shema/category.shema';
 import { CrumbsModule } from '../crumbs/crumbs.module';
 import { ProductSchema } from '../product/shema/product.shema';
+import { ModelsModule } from '../models/models.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProductSchema } from '../product/shema/product.shema';
       'product',
     ),
     CrumbsModule,
+    ModelsModule,
   ],
   providers: [CategoryService],
   controllers: [CategoryController],

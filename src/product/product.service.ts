@@ -4,13 +4,16 @@ import { Model } from 'mongoose';
 import { CategoryService } from '../category/category.service';
 import { CrumbsService } from '../crumbs/crumbs.service';
 import { defaultCrumbs } from '../crumbsConfig/crumbsDefault';
+import { ModelsService } from '../models/models.service';
 import { ProductDto } from './dto/product.dto';
 import { Product } from './interfaces/product.inteface';
 
 @Injectable()
 export class ProductService {
+  productModel = this.modelsService.getProductModel();
+  categoryModel = this.modelsService.getCategoryModel();
   constructor(
-    @InjectModel('Product') private productModel: Model<Product>,
+    private modelsService: ModelsService,
     private crumbsService: CrumbsService,
   ) {}
 
