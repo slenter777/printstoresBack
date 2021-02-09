@@ -22,11 +22,13 @@ export class ProductController {
 
   @Get(':prefix/:id')
   async getProduct(@Param() { prefix, id }) {
+    console.log(prefix, id);
     return this.productService.findById(id, prefix);
   }
 
   @Get('prefix')
   async getProductByKey(@Query('prefix') prefix) {
+    console.log(prefix, 'prefix');
     const products = await this.productService.findByPrefix(prefix);
     return { products, status: HttpStatus.OK };
   }

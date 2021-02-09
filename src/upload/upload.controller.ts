@@ -21,9 +21,9 @@ export const editFileName = (req, file, callback) => {
   callback(null, `${randomName}.${type}`);
 };
 
-@Controller('upload')
+@Controller('storage')
 export class UploadController {
-  @Post()
+  @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({

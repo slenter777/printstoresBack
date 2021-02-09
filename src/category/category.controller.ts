@@ -20,7 +20,7 @@ export class CategoryController {
     return result;
   }
 
-  @Post('/create')
+  @Post('create')
   async createCategory(@Body() data: CategoryDto) {
     return await this.categoryService.create(data);
   }
