@@ -23,26 +23,14 @@ export class CatalogController {
 
   @Get('filter')
   async catalogFilter(
-    @Query('pageSize') pageSize = 8,
-    @Query('currentPage') currentPage = 1,
+    @Query('pageSize') pageSize,
+    @Query('currentPage') currentPage,
     @Query('filterText') filterText,
     @Query('sortBy') sortBy,
-    @Query('direction') direction = 'ASC',
+    @Query('direction') direction,
   ) {
     const params = { pageSize, currentPage, sortBy, filterText, direction };
-    if (filterText && sortBy) {
-      return this.catalogService.sortProductsAndFilterText(params);
-    }
-
-    if (!filterText && sortBy) {
-      return this.catalogService.sortProducts(params);
-    }
-
-    if (filterText) {
-      return this.catalogService.filterProductsByText(params);
-    }
-
-    return this.catalogService.filterProductsByPagination(params);
+    return this.catalogService.filterAndSort(params);
   }
 
   @Get('type/:categoryType')
