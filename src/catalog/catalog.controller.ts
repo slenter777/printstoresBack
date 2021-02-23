@@ -4,7 +4,9 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { CategoryService } from '../category/category.service';
 import { CatalogService } from './catalog.service';

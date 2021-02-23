@@ -18,6 +18,16 @@ import { MongooseModule } from '@nestjs/mongoose';
       useUnifiedTopology: true,
       connectionName: 'users',
     }),
+    MongooseModule.forRoot(process.env.MONGO_CONNECT_REVIEWS, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      connectionName: 'reviews',
+    }),
+    MongooseModule.forRoot(process.env.MONGO_CONNECT_ORDERS, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      connectionName: 'orders',
+    }),
   ],
 })
 export class DatabaseModule {}
