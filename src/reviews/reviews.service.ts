@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { ModelsService } from '../models/models.service';
-import { ReviewsDto } from '../models/repository/reviews/dto/reviews.dto';
+import { ReviewsDto } from '../repository/reviews/dto/reviews.dto';
 
 import fetch from 'node-fetch';
 

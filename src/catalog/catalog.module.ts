@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 import { CatalogController } from './catalog.controller';
-import { CategoryModule } from '../category/category.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ProductSchema } from '../product/shema/product.shema';
+import { ProductsConnect } from '../repository/products/connect/products.connect';
+import { categoryConnect } from '../repository/category/connect/category.collection.connect';
+
 @Module({
   imports: [
-    CategoryModule,
-    MongooseModule.forFeature(
-      [{ name: 'Product', schema: ProductSchema }],
-      'product',
-    ),
+    ProductsConnect,
+    categoryConnect,
   ],
   providers: [CatalogService],
   controllers: [CatalogController],

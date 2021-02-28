@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(process.env.MONGO_CONNECT_CATEGORY, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      connectionName: 'category',
+      connectionName: 'catalog',
     }),
     MongooseModule.forRoot(process.env.MONGO_CONNECT_PRODUCT, {
       useNewUrlParser: true,

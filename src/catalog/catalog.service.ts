@@ -1,57 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Product } from '../product/interfaces/product.inteface';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
+import { ProductsService } from '../products/products.service';
+import { CategoryDocument } from '../repository/category/schema/category.schema';
+
+interface IFilterParams {
+  filter?: { category: string };
+  page?: number;
+  filterText?: string;
+  sortBy?: string;
+  direction?: string;
+  pageSize?: number;
+}
+
+type AllProductsFilterParams = Omit<IFilterParams, 'filter'>;
 
 @Injectable()
 export class CatalogService {
-  constructor(@InjectModel('Product') private productModel: Model<Product>) {}
+  constructor(private productService: ProductsService) {}
 
-  async filterAndSort(params) {
-    this.productModel.createIndexes({ name: 'text' });
-
-    const sortBy = params.sortBy || 'name';
-    const direction = params.direction || 'ASC';
-    const pageSize = params.pageSize || 24;
-    const currentPage = params.currentPage || 1;
-    const filterText = params.filterText || '';
+  async findAndFilter(filterParams: IFilterParams) {
+    const sortBy = filterParams.sortBy || 'name';
+    const direction = filterParams.direction || 'ASC';
+    const pageSize = filterParams.pageSize || 24;
+    const page = filterParams.page || 1;
+    const filterText = filterParams.filterText || '';
     const orderBy = direction === 'ASC' ? 1 : -1;
-    const searchParams = {
-      filterText,
-      pageSize,
-      currentPage,
-      direction,
-      sortBy,
-    };
+    const categoryID = filterParams.filter.category || '';
 
-    if (filterText.length < 3) {
-      const total = await this.productModel.find();
-      const products = await this.productModel
-        .find()
-        .sort({ [sortBy]: orderBy })
-        .skip(+pageSize * (currentPage - 1))
-        .limit(+pageSize);
+    const params = { sortBy, direction, pageSize, page, filterText, orderBy, categoryID };
 
-      return {
-        total: total.length,
-        products,
-        searchParams,
-      };
-    }
+    return this.productService.filterByRelatedCategory(params);
+  }
 
-    const total = await this.productModel.find({
-      $text: { $search: filterText },
-    });
+  async findAll(filterParams: AllProductsFilterParams) {
+    const sortBy = filterParams.sortBy || 'name';
+    const direction = filterParams.direction || 'ASC';
+    const pageSize = filterParams.pageSize || 24;
+    const page = filterParams.page || 1;
+    const filterText = filterParams.filterText || '';
+    const orderBy = direction === 'ASC' ? 1 : -1;
 
-    const products = await this.productModel
-      .find({ name: { $regex: filterText } })
-      .sort({ [sortBy]: orderBy })
-      .skip(parseInt(pageSize) * (parseInt(currentPage) - 1))
-      .limit(parseInt(pageSize));
-    return {
-      products,
-      total: total.length,
-      searchParams,
-    };
+    const params = { sortBy, direction, pageSize, page, filterText, orderBy };
+
+    return this.productService.findAll(params);
   }
 }

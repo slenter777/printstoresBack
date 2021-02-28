@@ -1,40 +1,36 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
-import CategoryDto, { CategoryDeleteDto } from './dto/category.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
+@ApiTags('category')
 @Controller('category')
 export class CategoryController {
-  constructor(private categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) {}
+
   @Post()
-  async getPayment(@Req() req, @Body() body) {
-    console.log('test', body);
-  }
-  @Get('all')
-  async getAllCategory() {
-    return await this.categoryService.getAllCategory();
-  }
-  @Get(':key')
-  async getCategoryByKey(@Param() { key }) {
-    return await this.categoryService.findByKey(key);
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.create(createCategoryDto);
   }
 
-  @Delete('delete')
-  async deleteCategory(@Body() data: CategoryDeleteDto[]) {
-    const result = await this.categoryService.deleteCategory(data);
-    return result;
+  @Get()
+  findAll() {
+    return this.categoryService.findAll();
   }
 
-  @Post('create')
-  async createCategory(@Body() data: CategoryDto) {
-    console.log(data);
-    return await this.categoryService.create(data);
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.categoryService.findOne(+id);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+    return this.categoryService.update(+id, updateCategoryDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.categoryService.remove(+id);
   }
 }

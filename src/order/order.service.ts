@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OrderDto } from '../models/repository/orders/dto/order.dto';
-import { IOrder } from '../models/repository/orders/interface/order.interface';
+import { OrderDto } from '../repository/orders/dto/order.dto';
+import { IOrder } from '../repository/orders/interface/order.interface';
 
 const ignoredList = {
   __v: 0,

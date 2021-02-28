@@ -1,54 +1,32 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-  Req,
-} from '@nestjs/common';
-import { CategoryService } from '../category/category.service';
+import { Controller, Get, Query } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 
 @Controller('catalog')
 export class CatalogController {
-  constructor(
-    private categoryServise: CategoryService,
-    private catalogService: CatalogService,
-  ) {}
+  constructor(private catalogService: CatalogService) {}
 
-  @Get('all')
-  async allCategory() {
-    return await this.categoryServise.getAllCategory();
-  }
-
-  @Get('filter')
-  async catalogFilter(
+  @Get()
+  async findAll(
     @Query('pageSize') pageSize,
-    @Query('currentPage') currentPage,
+    @Query('page') page,
     @Query('filterText') filterText,
     @Query('sortBy') sortBy,
     @Query('direction') direction,
   ) {
-    const params = { pageSize, currentPage, sortBy, filterText, direction };
-    return this.catalogService.filterAndSort(params);
+    const params = { pageSize, page, sortBy, filterText, direction };
+    return this.catalogService.findAll(params);
   }
 
-  @Get('type/:categoryType')
-  async getCategoryByType(
-    @Param('categoryType') categoryType: string,
-    @Query() query,
-  ) {}
-
-  @Get('view/:category')
-  async getCategoryByView(@Param('category') category: string, @Query() query) {
-    console.log(category, 'type');
+  @Get('list')
+  async catalogListFilter(
+    @Query('filter') filter,
+    @Query('pageSize') pageSize,
+    @Query('page') page,
+    @Query('filterText') filterText,
+    @Query('sortBy') sortBy,
+    @Query('direction') direction,
+  ) {
+    const params = { pageSize, page, sortBy, filterText, direction, filter };
+    return this.catalogService.findAndFilter(params);
   }
-
-  @Get('group/:categoryGroup')
-  async getCategoryByGroup(
-    @Param('categoryGroup') categoryGroup: string,
-    @Query() query,
-  ) {}
 }

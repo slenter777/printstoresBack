@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Res, Query } from '@nestjs/common';
-import { OrderDto } from '../models/repository/orders/dto/order.dto';
+import { OrderDto } from '../repository/orders/dto/order.dto';
 import { OrderService } from './order.service';
 
 @Controller('order')

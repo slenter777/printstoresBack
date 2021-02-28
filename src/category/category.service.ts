@@ -1,54 +1,32 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CrumbsService } from '../crumbs/crumbs.service';
-import { ModelsService } from '../models/models.service';
-import { Product } from '../product/interfaces/product.inteface';
-import CategoryDto, { CategoryDeleteDto } from './dto/category.dto';
-import { Category } from './interfaces/Category.interfaces';
+import { CategoryDocument } from '../repository/category/schema/category.schema';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
-  categoryModel = this.modelsService.getCategoryModel();
-  productModel = this.modelsService.getProductModel();
-  constructor(
-    private modelsService: ModelsService,
-    private crumbsService: CrumbsService,
-  ) {}
+  constructor(@InjectModel('Category') private categoryModel: Model<CategoryDocument>) {}
 
-  async create(category: CategoryDto) {
-    const result = await this.categoryModel.findOne({ key: category.key });
-    if (result)
-      throw new BadRequestException({ message: 'Такая категория уже есть' });
-
-    return await new this.categoryModel(category).save();
-  }
-  async getAllCategory() {
-    const category = await this.categoryModel.find();
-    return { category };
+  async create(createCategoryDto: CreateCategoryDto) {
+    const category = await new this.categoryModel(createCategoryDto).save();
+    return category;
   }
 
-  async deleteCategory(data: CategoryDeleteDto[]) {
-    let quantity = 0;
-    for await (let key of data) {
-      await this.categoryModel.deleteOne({ key });
-      quantity++;
-    }
-    const category = await this.categoryModel.find();
-    return { category, quantity };
+  findAll() {
+    return `This action returns all category`;
   }
 
-  async findByKey(key: string) {
-    const category = await this.productModel.find({ key });
-    return { category };
+  findOne(id: number) {
+    return `This action returns a #${id} category`;
   }
 
-  async getCategoryByKey(key: string) {
-    const category = await this.categoryModel.find({ key });
+  update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    return `This action updates a #${id} category`;
   }
 
-  async getCategoryById(id: number) {
-    const category = await this.categoryModel.findById(id);
-    return { category };
+  remove(id: number) {
+    return `This action removes a #${id} category`;
   }
 }
