@@ -5,7 +5,7 @@ export type ProductDocument = Product & Document;
 
 @Schema()
 export class Product {
-  @Prop()
+  @Prop({ index: 'text' })
   title: string;
   @Prop({ type: Object })
   category: { id: string; title: string };
